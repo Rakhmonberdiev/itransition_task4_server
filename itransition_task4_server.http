@@ -1,0 +1,6 @@
+@itransition_task4_server_HostAddress = http://localhost:5263
+
+GET {{itransition_task4_server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
