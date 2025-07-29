@@ -1,6 +1,9 @@
 ﻿using itransition_task4_server.Data.Entities;
 using itransition_task4_server.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
 
 namespace itransition_task4_server.Extensions
 {
@@ -28,6 +31,27 @@ namespace itransition_task4_server.Extensions
                     options.SlidingExpiration = true;
                     options.LoginPath = "/auth/login";
                     options.LogoutPath = "/auth/logout";
+                    options.Events = new CookieAuthenticationEvents
+                    {
+                        OnValidatePrincipal = async ctx =>
+                        {
+                            var userId = ctx.Principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                            if (userId is null)
+                            {
+                                ctx.RejectPrincipal();
+                                return;
+                            }
+                            var userManager = ctx.HttpContext.RequestServices
+                                                 .GetRequiredService<UserManager<AppUser>>();
+                            var user = await userManager.FindByIdAsync(userId);
+
+                            if (user is null || user.IsBlocked)
+                            {
+                                ctx.RejectPrincipal();
+                                await ctx.HttpContext.SignOutAsync();
+                            }
+                        }
+                    };
                 });
             services.AddAuthorization();
             return services;

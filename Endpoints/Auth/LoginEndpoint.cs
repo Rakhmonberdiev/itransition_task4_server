@@ -17,6 +17,8 @@ namespace itransition_task4_server.Endpoints.Auth
                 var result = await signInManager.CheckPasswordSignInAsync(user, request.Password, false);
                 if (!result.Succeeded)
                     return Results.Unauthorized();
+                if (user.IsBlocked)
+                    return Results.Unauthorized();
                 await userManager.Users.Where(u => u.Id == user.Id)
                     .ExecuteUpdateAsync(u => u.SetProperty(x => x.LastLoginAt, DateTime.UtcNow));
                 await signInManager.SignInAsync(user, request.isPersistent);
