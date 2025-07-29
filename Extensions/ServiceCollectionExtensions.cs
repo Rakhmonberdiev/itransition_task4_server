@@ -8,5 +8,11 @@
             services.AddIdentityServices();
             return services;
         }
+        public static void UseAppMiddlewares(this IApplicationBuilder app)
+        {
+            app.UseHttpsRedirection();
+            app.UseAuthentication();
+            app.UseAuthorization();
+        }
     }
 }

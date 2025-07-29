@@ -19,7 +19,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 await DbInitializer.InitDb(app);
-
+app.UseAppMiddlewares();    
 app.MapEndpoints();
 app.Run();
 
