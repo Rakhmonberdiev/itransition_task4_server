@@ -1,4 +1,6 @@
-﻿namespace itransition_task4_server.Extensions
+﻿using FluentValidation;
+
+namespace itransition_task4_server.Extensions
 {
     public static class ServiceCollectionExtensions
     {
@@ -6,6 +8,8 @@
         {
             services.AddDbContextServices(conf);
             services.AddIdentityServices();
+            services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+
             return services;
         }
         public static void UseAppMiddlewares(this IApplicationBuilder app)

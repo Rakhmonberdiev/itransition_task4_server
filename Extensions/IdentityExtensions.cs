@@ -29,10 +29,18 @@ namespace itransition_task4_server.Extensions
                 {
                     options.ExpireTimeSpan = TimeSpan.FromHours(1);
                     options.SlidingExpiration = true;
-                    options.LoginPath = "/auth/login";
-                    options.LogoutPath = "/auth/logout";
                     options.Events = new CookieAuthenticationEvents
                     {
+                        OnRedirectToLogin = ctx =>
+                        {
+                            ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            return Task.CompletedTask;
+                        },
+                        OnRedirectToAccessDenied = ctx =>
+                        {
+                            ctx.Response.StatusCode = StatusCodes.Status403Forbidden;
+                            return Task.CompletedTask;
+                        },
                         OnValidatePrincipal = async ctx =>
                         {
                             var userId = ctx.Principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
