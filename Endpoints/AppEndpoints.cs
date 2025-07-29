@@ -1,4 +1,4 @@
-﻿using itransition_task4_server.Data.Entities;
+﻿using itransition_task4_server.Endpoints.Auth;
 
 namespace itransition_task4_server.Endpoints
 {
@@ -6,7 +6,7 @@ namespace itransition_task4_server.Endpoints
     {
         public static IEndpointRouteBuilder MapEndpoints(this IEndpointRouteBuilder app)
         {
-            app.MapIdentityApi<AppUser>();
+            app.MapGroup("auth").WithTags("Auth").MapAuthEndpoints();
             return app;
         }
     }

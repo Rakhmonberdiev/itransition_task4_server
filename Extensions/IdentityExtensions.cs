@@ -9,7 +9,12 @@ namespace itransition_task4_server.Extensions
         public static IServiceCollection AddIdentityServices(this IServiceCollection services)
         {
             services.AddAuthorization();
-            services.AddAuthentication(IdentityConstants.ApplicationScheme).AddCookie(IdentityConstants.ApplicationScheme);
+            services.AddAuthentication(IdentityConstants.ApplicationScheme)
+                .AddCookie(IdentityConstants.ApplicationScheme, options =>
+                {
+                    options.ExpireTimeSpan = TimeSpan.FromHours(1);
+                    options.SlidingExpiration = true;
+                });
             services.AddIdentityCore<AppUser>(opt =>
             {
                 opt.User.RequireUniqueEmail = true;
@@ -19,8 +24,9 @@ namespace itransition_task4_server.Extensions
                 opt.Password.RequiredLength = 1;
                 opt.Password.RequireNonAlphanumeric = false;
             }).AddEntityFrameworkStores<AppDbContext>()
-            .AddApiEndpoints();
-
+            .AddSignInManager()
+            .AddDefaultTokenProviders();
+        
             return services;
         }
     }
