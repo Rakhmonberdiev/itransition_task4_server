@@ -5,6 +5,7 @@
         public static IEndpointRouteBuilder MapUserEndpoints(this IEndpointRouteBuilder app)
         {
             app.MapGetUsersEndpoint();
+            app.MapUserBlockUnblock();
             return app;
         }
     }

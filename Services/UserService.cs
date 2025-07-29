@@ -8,6 +8,8 @@ namespace itransition_task4_server.Services
 {
     public class UserService(AppDbContext db) : IUserService
     {
+
+
         public async Task<PagedResponse<UserDTO>> GetUsersAsync(GetUsersQuery req)
         {
             var query = db.Users.AsNoTracking();
@@ -38,6 +40,18 @@ namespace itransition_task4_server.Services
                 Page: req.Page,
                 PageSize: req.PageSize
             );
+        }
+
+        public Task BlockUsersAsync(IEnumerable<Guid> ids)
+            => SetBlockedStateAsync(ids, true);
+        public Task UnBlockUsersAsync(IEnumerable<Guid> ids)
+            => SetBlockedStateAsync(ids, false);
+
+        private Task SetBlockedStateAsync(IEnumerable<Guid> ids, bool blocked)
+        {
+            return db.Users
+                .Where(u => ids.Contains(u.Id))
+                .ExecuteUpdateAsync(builder =>builder.SetProperty(u => u.IsBlocked, blocked));
         }
     }
 }
