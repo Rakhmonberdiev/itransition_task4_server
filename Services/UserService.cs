@@ -53,5 +53,11 @@ namespace itransition_task4_server.Services
                 .Where(u => ids.Contains(u.Id))
                 .ExecuteUpdateAsync(builder =>builder.SetProperty(u => u.IsBlocked, blocked));
         }
+        public Task DeleteUsersAsync(IEnumerable<Guid> ids)
+        {
+            return db.Users
+                .Where(u => ids.Contains(u.Id))
+                .ExecuteDeleteAsync();
+        }
     }
 }

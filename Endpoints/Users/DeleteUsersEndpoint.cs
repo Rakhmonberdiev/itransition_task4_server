@@ -5,24 +5,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace itransition_task4_server.Endpoints.Users
 {
-    public static class UserBlockUnblockEndpoint
+    public static class DeleteUsersEndpoint
     {
-        public static void MapUserBlockUnblock(this IEndpointRouteBuilder app)
+        public static void MapDeleteUsersEndpoint(this IEndpointRouteBuilder app)
         {
-            app.MapPost("update-block", async (
-                [FromBody] UpdateBlockUsersRequest req,
-                IValidator<UpdateBlockUsersRequest> validator,
+            app.MapDelete("delete", async (
+                [FromBody] DeleteUsersRequest req,
+                IValidator<DeleteUsersRequest> validator,
                 IUserService userService) =>
             {
                 var validationResult = await validator.ValidateAsync(req);
                 if (!validationResult.IsValid)
                     return Results.ValidationProblem(validationResult.ToDictionary());
-                if (req.Block.Value)
-                    await userService.BlockUsersAsync(req.Ids);
-                else
-                    await userService.UnBlockUsersAsync(req.Ids);
+                await userService.DeleteUsersAsync(req.Ids);
                 return Results.NoContent();
-            }).RequireAuthorization();;
+            }).RequireAuthorization();
         }
     }
 }

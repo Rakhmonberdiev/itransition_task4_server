@@ -6,6 +6,7 @@
         {
             app.MapGetUsersEndpoint();
             app.MapUserBlockUnblock();
+            app.MapDeleteUsersEndpoint();
             return app;
         }
     }
