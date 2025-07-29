@@ -14,7 +14,7 @@ namespace itransition_task4_server.Data.Seed
             {
                 var user = new AppUser
                 {
-                    UserName = $"user{i}",
+                    UserName = $"user{i}@gmail.com",
                     Email = $"user{i}@gmail.com",
                     EmailConfirmed = true,
                     RegisteredAt = DateTime.UtcNow.AddDays(-i),
