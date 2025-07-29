@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using itransition_task4_server.Services;
 using itransition_task4_server.Services.Interfaces;
+using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
 namespace itransition_task4_server.Extensions
 {
@@ -10,6 +11,7 @@ namespace itransition_task4_server.Extensions
         {
             services.AddDbContextServices(conf);
             services.AddIdentityServices();
+            services.AddFluentValidationAutoValidation();
             services.AddValidatorsFromAssembly(typeof(Program).Assembly);
             services.AddScoped<IUserService, UserService>();
             return services;

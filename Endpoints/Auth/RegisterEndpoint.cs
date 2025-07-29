@@ -1,7 +1,7 @@
-﻿using FluentValidation;
-using itransition_task4_server.Data.Entities;
+﻿using itransition_task4_server.Data.Entities;
 using itransition_task4_server.Endpoints.Auth.DTOs;
 using Microsoft.AspNetCore.Identity;
+using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
 namespace itransition_task4_server.Endpoints.Auth
 {
@@ -11,11 +11,9 @@ namespace itransition_task4_server.Endpoints.Auth
         {
             app.MapPost("regiser", async (RegisterRequest request,
                 SignInManager<AppUser> signInManager,
-                UserManager<AppUser> userManager, 
-                IValidator<RegisterRequest> validator) =>
+                UserManager<AppUser> userManager
+                ) =>
             {
-                var validationResult = await validator.ValidateAsync(request);
-                if (!validationResult.IsValid) return Results.ValidationProblem(validationResult.ToDictionary());
                 var user = new AppUser
                 {
                     UserName = request.Email,
@@ -25,7 +23,7 @@ namespace itransition_task4_server.Endpoints.Auth
                 await userManager.CreateAsync(user, request.Password);
                 await signInManager.SignInAsync(user, isPersistent: true);
                 return Results.Ok(new AuthResponse(user.Email));
-            }).WithName("Register");
+            }).WithName("Register").AddFluentValidationAutoValidation();
       
         }
     }
