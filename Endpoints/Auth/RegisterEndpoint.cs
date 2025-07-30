@@ -16,13 +16,22 @@ namespace itransition_task4_server.Endpoints.Auth
             {
                 var user = new AppUser
                 {
+                    FullName = request.FullName,
                     UserName = request.Email,
                     Email = request.Email,
                     EmailConfirmed = true
                 };
-                await userManager.CreateAsync(user, request.Password);
-                await signInManager.SignInAsync(user, isPersistent: true);
-                return Results.Ok(new AuthResponse(user.Email));
+                var result = await userManager.CreateAsync(user, request.Password);
+                if (result.Succeeded)
+                {
+                    await signInManager.SignInAsync(user, isPersistent: true);
+                    return Results.Ok(new AuthResponse(user.Email));
+                }
+                return Results.BadRequest(new
+                {
+                    message = "An unexpected error occurred. Please try again later."
+                });
+
             }).WithName("Register").AddFluentValidationAutoValidation();
       
         }

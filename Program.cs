@@ -6,7 +6,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAppServices(builder.Configuration);
 builder.Services.AddOpenApi();
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularDev", policy =>
+    {
+        policy
+          .WithOrigins("http://localhost:4200") 
+          .AllowAnyHeader()                      
+          .AllowAnyMethod()                       
+          .AllowCredentials();                    
+    });
+});
 var app = builder.Build();
 
 
@@ -17,7 +27,9 @@ if (app.Environment.IsDevelopment())
     {
         opt.SwaggerEndpoint("/openapi/v1.json", "Open API");
     });
+    app.UseCors("AllowAngularDev");
 }
+app.UseCors();
 await DbInitializer.InitDb(app);
 app.UseAppMiddlewares();    
 app.MapEndpoints();
