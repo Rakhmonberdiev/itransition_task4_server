@@ -9,7 +9,7 @@ namespace itransition_task4_server.Endpoints.Auth
     {
         public static void MapRegisterEndpoint(this IEndpointRouteBuilder app)
         {
-            app.MapPost("regiser", async (RegisterRequest request,
+            app.MapPost("register", async (RegisterRequest request,
                 SignInManager<AppUser> signInManager,
                 UserManager<AppUser> userManager
                 ) =>

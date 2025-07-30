@@ -23,6 +23,7 @@ namespace itransition_task4_server.Services
             query = query.OrderByDescending(u => u.LastLoginAt);
             var total = await query.CountAsync();
             var items = await query
+                .OrderBy(x=>x.FullName)
                 .Skip((req.Page - 1) * req.PageSize)
                 .Take(req.PageSize)
                 .Select(u => new UserDTO(
